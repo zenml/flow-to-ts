@@ -7,7 +7,7 @@ import * as path from "path";
 import { expectEOF, expectSingleResult } from "./parsec";
 import { printTypeScript } from "./PrintTS";
 
-function readWrite(filePath, outputPath) {
+function readWrite(filePath: string, outputPath: string) {
     //根据文件路径读取文件，返回文件列表
     fs.readdir(filePath, function (err, files) {
         if (err) {
