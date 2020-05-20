@@ -1,0 +1,14 @@
+{
+    "name": "flow-to-ts",
+    "version": "0.1.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc --watch",
+        "start": "node ./lib/index.js"
+    },
+    "devDependencies": {
+        "@types/node": "^12.6.9",
+        "typescript": "^3.5.3"
+    }
+}
