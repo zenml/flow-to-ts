@@ -10,7 +10,8 @@
         "outDir": "./lib",
         "noEmitOnError": true,
         "noUnusedLocals": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "noImplicitAny": true
     },
     "exclude": ["node_modules", "src/test", "lib", "lib-amd"]
 }
