@@ -393,6 +393,26 @@ function printStatement(
             );
             break;
         }
+        case "FunctionDecl": {
+            printer.write(`function ${stat.name} (`);
+            // printType(printer, stat.parameters[0].parameterType, typeConfig);
+            stat.parameters?.forEach((params) => {
+                printer.write(params.name);
+                printer.write(":");
+                printType(printer, params.parameterType, typeConfig);
+                printer.write(",");
+            });
+            printer.write(")");
+            printer.write("{");
+            printer.writeLn();
+            stat.statement?.forEach((statem) => {
+                printStatement(printer, statem, true, typeConfig);
+                printer.writeLn();
+            });
+            printer.write("}");
+            break;
+        }
+
         case "ImportEqualStat": {
             printer.write(`import ${stat.name} from ${stat.source};`);
             break;
@@ -450,7 +470,7 @@ function printStatement(
                 printer.write(prop.key);
                 if (prop.value) {
                     printer.write(": ");
-                    printExpression(printer, prop.value,typeConfig);
+                    printExpression(printer, prop.value, typeConfig);
                 }
                 if (i < stat.properties.length - 1) {
                     printer.write(",");

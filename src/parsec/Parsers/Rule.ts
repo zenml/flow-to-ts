@@ -77,6 +77,5 @@ export function expectSingleResult<TKind, TResult>(output: ParserOutput<TKind, T
     if (output.candidates.length !== 1) {
         throw new TokenError(undefined, 'Multiple results are returned.');
     }
-
     return output.candidates[0].result;
 }

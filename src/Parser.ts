@@ -19,9 +19,10 @@ import {
     tok,
 } from "./parsec";
 import * as ast from "./AST";
+export { ast };
 import { TokenKind } from "./Tokenizer";
 
-type Token = parsec.Token<TokenKind>;
+export type Token = parsec.Token<TokenKind>;
 
 /*****************************************************************
  * Types (apply)
@@ -425,6 +426,29 @@ function applyInterfaceDecl(
         interfaceType,
     };
 }
+//value: [Token, [[Token, Type][] | undefined, Statement[] | undefined]]
+function applyFunctionDecl(
+    value: [
+        Token,
+        [[Token, ast.Type][] | undefined, ast.Statement[] | undefined]
+    ],
+    tokenRange: [Token | undefined, Token | undefined]
+): ast.FucntionDecl {
+    const [name, [parameters, statement]] = value;
+    const params: { name: string; parameterType: ast.Type }[] = [];
+    parameters?.forEach((param) => {
+        params.push({ name: param[0].text, parameterType: param[1] });
+    });
+    return {
+        kind: "FunctionDecl",
+        name: name.text,
+        //[Token, Type][]
+        //{ name: string; parameterType: Type; }[]
+        parameters: params,
+        statement,
+        hasExport: true,
+    };
+}
 
 /*****************************************************************
  * Statements (apply)
@@ -508,7 +532,6 @@ function applyAssignmentStat(value: [Token, ast.Expression]): ast.Statement {
     if (expr.kind === "CallExpr") {
         expr.expr = expr.expr as ast.ExprReference;
         if (expr.expr.name === "require") {
-            
             return {
                 kind: "ImportEqualStat",
                 name: name.text,
@@ -631,7 +654,6 @@ TYPE_TERM.setPattern(
                 applyLiteralType
             ),
             apply(kright(str("?"), TYPE), applyOptionalType),
-
             apply(
                 seq(
                     kright(
@@ -797,6 +819,31 @@ DECL.setPattern(
                 createObjectSyntax()
             ),
             applyInterfaceDecl
+        ),
+        apply(
+            seq(
+                kright(str("function"), IDENTIFIER),
+                seq(
+                    kleft(
+                        kmid(
+                            str("("),
+                            opt_sc(
+                                list_sc(
+                                    seq(kleft(IDENTIFIER, str(":")), TYPE),
+                                    str(",")
+                                )
+                            ),
+                            str(")")
+                        ),
+                        str("{")
+                    ),
+                    kleft(
+                        opt_sc(list_sc(STAT, opt_sc(str("")))),
+                        seq(str("}"), str(";"))
+                    )
+                )
+            ),
+            applyFunctionDecl
         )
     )
 );

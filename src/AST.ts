@@ -163,7 +163,7 @@ export type Expression =
     | CallExpr
     | ObjectLiteralExpr
     | ArrayLiteralExpr
-    | ParenExpr
+    | ParenExpr;
 
 /*****************************************************************
  * Declarations
@@ -191,8 +191,17 @@ export interface InterfaceDecl extends DeclarationBase {
     baseTypes: Type[];
     interfaceType: ObjectType;
 }
+export interface FucntionDecl extends DeclarationBase {
+    kind: "FunctionDecl";
+    parameters: { name: string; parameterType: Type }[] | undefined;
+    statement: Statement[] | undefined;
+}
 
-export type Declaration = TypeAliasDecl | InterfaceDecl | TypesAliasDecl;
+export type Declaration =
+    | TypeAliasDecl
+    | InterfaceDecl
+    | TypesAliasDecl
+    | FucntionDecl;
 
 /*****************************************************************
  * Statements

@@ -67,7 +67,7 @@ function readWrite(filePath: string, outputPath: string) {
 }
 
 export function convertCodegenSchema(): void {
-    const inputPath = path.join(__dirname, `../../recoil/src/`);
+    const inputPath = path.join(__dirname, `../../recoil/test/`);
     const outputPath = path.join(__dirname, `../../recoil/ts`);
     readWrite(inputPath, outputPath);
 }
