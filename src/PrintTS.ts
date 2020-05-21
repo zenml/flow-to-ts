@@ -397,6 +397,12 @@ function printStatement(
             printer.write(`import ${stat.name} from ${stat.source};`);
             break;
         }
+        case "AssignmentStat": {
+            printer.write(`const ${stat.name} = `);
+            printExpression(printer, stat.expr, typeConfig);
+            printer.write(";");
+            break;
+        }
         case "ImportAsStat": {
             printer.write(`import * as ${stat.name} from ${stat.source};`);
             break;
@@ -423,6 +429,12 @@ function printStatement(
         }
         case "ExportEqualStat": {
             printer.write(`export const ${stat.name} = `);
+            printExpression(printer, stat.expr, typeConfig);
+            printer.write(";");
+            break;
+        }
+        case "ConstEqualNewStat": {
+            printer.write(`const ${stat.name} = new `);
             printExpression(printer, stat.expr, typeConfig);
             printer.write(";");
             break;

@@ -163,7 +163,7 @@ export type Expression =
     | CallExpr
     | ObjectLiteralExpr
     | ArrayLiteralExpr
-    | ParenExpr;
+    | ParenExpr
 
 /*****************************************************************
  * Declarations
@@ -214,12 +214,6 @@ export interface ImportNameStatement {
     source: string;
 }
 
-// export interface ImportNamesStatement {
-//     kind: "ImportNamesStat";
-//     names: string[];
-//     source: string;
-// }
-
 export interface ExportImportNameStatement {
     kind: "ExportImportNameStat";
     name: string[] | string;
@@ -232,8 +226,8 @@ export interface ExportEqualStatement {
     expr: Expression;
 }
 
-export interface ConstEqualStatement {
-    kind: "ConstEqualStat";
+export interface ConstEqualNewStatement {
+    kind: "ConstEqualNewStat";
     name: string;
     expr: Expression;
 }
@@ -241,7 +235,7 @@ export interface ConstEqualStatement {
 export interface AssignmentStatement {
     kind: "AssignmentStat";
     name: string;
-    source: string | { key: string; value: Expression | undefined }[];
+    expr: Expression;
 }
 
 export interface ModuleExportEqualStatement {
@@ -263,7 +257,7 @@ export type Statement =
     | ImportNameStatement
     | ExportImportNameStatement
     | ExportEqualStatement
-    | ConstEqualStatement
+    | ConstEqualNewStatement
     | ExportDefaultStatement;
 
 /*****************************************************************

@@ -445,15 +445,6 @@ function applyUseStrictStat(
     };
 }
 
-function applyImportEqualStat(value: [Token, Token]): ast.Statement {
-    const [name, source] = value;
-    return {
-        kind: "ImportEqualStat",
-        name: name.text,
-        source: source.text,
-    };
-}
-
 function applyImportAsStat(value: [Token, Token]): ast.Statement {
     const [name, source] = value;
     return {
@@ -503,14 +494,34 @@ function applyExportEqualStat(value: [Token, ast.Expression]): ast.Statement {
     };
 }
 
-// function applyConstEqualStat(value: [Token, ast.Expression]): ast.Statement {
-//     const [name, expr] = value;
-//     return {
-//         kind: "ConstEqualStat",
-//         name: name.text,
-//         expr,
-//     };
-// }
+function applyConstEqualNewStat(value: [Token, ast.Expression]): ast.Statement {
+    const [name, expr] = value;
+    return {
+        kind: "ConstEqualNewStat",
+        name: name.text,
+        expr,
+    };
+}
+
+function applyAssignmentStat(value: [Token, ast.Expression]): ast.Statement {
+    const [name, expr] = value;
+    if (expr.kind === "CallExpr") {
+        expr.expr = expr.expr as ast.ExprReference;
+        if (expr.expr.name === "require") {
+            
+            return {
+                kind: "ImportEqualStat",
+                name: name.text,
+                source: (expr.funcArguments[0] as ast.LiteralExpr).text,
+            };
+        }
+    }
+    return {
+        kind: "AssignmentStat",
+        name: name.text,
+        expr,
+    };
+}
 
 function applyModuleExportEqualStat(
     value: [Token, ast.Expression | undefined][]
@@ -797,17 +808,6 @@ STAT.setPattern(
         alt(
             apply(
                 seq(
-                    kright(str("const"), tok(TokenKind.Identifier)),
-                    kmid(
-                        seq(str("="), str("require"), str("(")),
-                        tok(TokenKind.StringLiteral),
-                        seq(str(")"), str(";"))
-                    )
-                ),
-                applyImportEqualStat
-            ),
-            apply(
-                seq(
                     kright(
                         seq(str("const"), str("{")),
                         list_sc(IDENTIFIER, str(","))
@@ -910,20 +910,27 @@ STAT.setPattern(
         apply(
             seq(
                 kright(
-                    seq(opt_sc(str("export")), str("const")),
+                    seq(str("export"), str("const")),
                     tok(TokenKind.Identifier)
                 ),
                 kmid(str("="), EXPR, str(";"))
             ),
             applyExportEqualStat
         ),
-        // apply(
-        //     seq(
-        //         kright(str("const"), tok(TokenKind.Identifier)),
-        //         kmid(str("="), EXPR, str(";"))
-        //     ),
-        //     applyConstEqualStat
-        // ),
+        apply(
+            seq(
+                kright(str("const"), tok(TokenKind.Identifier)),
+                kmid(seq(str("="), str("new")), EXPR, str(";"))
+            ),
+            applyConstEqualNewStat
+        ),
+        apply(
+            seq(
+                kright(str("const"), tok(TokenKind.Identifier)),
+                kmid(str("="), EXPR, str(";"))
+            ),
+            applyAssignmentStat
+        ),
         apply(
             kmid(seq(str("export"), str("default")), EXPR, str(";")),
             applyExportDefaultStat

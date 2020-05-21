@@ -57,15 +57,15 @@ export enum TokenKind {
 
 export const tokenizer = buildLexer([
     [true, /^boolean/g, TokenKind.KEYWORD_boolean],
-    // [true, /^class/g, TokenKind.KEYWORD_class],
-    // [true, /^const/g, TokenKind.KEYWORD_const],
+    [true, /^class/g, TokenKind.KEYWORD_class],
+    [true, /^const/g, TokenKind.KEYWORD_const],
     [true, /^false/g, TokenKind.KEYWORD_false],
     [true, /^export/g, TokenKind.KEYWORD_export],
     [true, /^new/g, TokenKind.KEYWORD_new],
     [true, /^null/g, TokenKind.KEYWORD_null],
     [true, /^import/g, TokenKind.KEYWORD_import],
     [true, /^number/g, TokenKind.KEYWORD_number],
-    // [true, /^let/g, TokenKind.KEYWORD_let],
+    [true, /^let/g, TokenKind.KEYWORD_let],
     [true, /^string/g, TokenKind.KEYWORD_string],
     [true, /^from/g, TokenKind.KEYWORD_from],
     [true, /^true/g, TokenKind.KEYWORD_true],
