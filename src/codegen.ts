@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as fs from "fs";
-import * as flow from "./minimum-flow-parser";
+import * as flow from "./flow";
 import * as path from "path";
 import { expectEOF, expectSingleResult } from "./parsec";
 import { printTypeScript } from "./PrintTS";
@@ -66,8 +66,10 @@ function readWrite(filePath: string, outputPath: string) {
     });
 }
 
-export function convertCodegenSchema(): void {
+function main(): void {
     const inputPath = path.join(__dirname, `../../recoil/test/`);
     const outputPath = path.join(__dirname, `../../recoil/ts`);
     readWrite(inputPath, outputPath);
 }
+
+main();

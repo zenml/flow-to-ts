@@ -5,7 +5,7 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc --watch",
-        "start": "node ./lib/index.js"
+        "start": "node ./lib/codegen.js"
     },
     "devDependencies": {
         "@types/node": "^12.6.9",

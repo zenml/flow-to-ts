@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import * as flow from "./minimum-flow-parser";
+import * as flow from "./flow";
 import * as os from "os";
 
 class Printer {
